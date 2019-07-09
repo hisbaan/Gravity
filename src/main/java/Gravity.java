@@ -65,27 +65,33 @@ public class Gravity implements MouseListener {
     }
 
     public void move() {
-        if (xDragDelta == 0 || yDragDelta == 0) {
-        } else {
-
             xPos += xVelocity;
             yPos += yVelocity;
 
             board.validate();
             board.repaint();
-        }
     }
 
     public void getAngle() {
-        xDragDelta = xFinal - xInitial;
-        yDragDelta = yFinal - yInitial;
+        if (xDragDelta != 0 && yDragDelta != 0) {
+            xDragDelta = xFinal - xInitial;
+            yDragDelta = yFinal - yInitial;
 
-        angleRadian = Math.tan(yDragDelta / xDragDelta);
+            angleRadian = Math.tan(yDragDelta / xDragDelta);
 
-        xVelocity = (int) (5 * Math.cos(angleRadian));
-        xVelocity = (int) (5 * Math.sin(angleRadian));
+//        if (angleRadian < 0) {
+//            angleRadian += 360;
+//        } else if (angleRadian > 360) {
+//            angleRadian -= 360;
+//        }
 
-        System.out.println("angle: " + Math.toDegrees(angleRadian) + "" + "" + "");
+            xVelocity = (int) (5 * Math.cos(angleRadian));
+            yVelocity = (int) (5 * Math.sin(angleRadian));
+
+            System.out.println("angle: " + Math.toDegrees(angleRadian) + " | xVel: " + xVelocity + " | yVel: " + yVelocity + "");
+        } else {
+            System.out.println("xDelta: " + xDragDelta + " | yDelta: " + yDragDelta);
+        }
     }
 
     @Override
@@ -93,6 +99,8 @@ public class Gravity implements MouseListener {
         if (e.getSource() == simulationFrame) {
             xInitial = xPos;
             yInitial = yPos;
+//            xInitial = e.getX();
+//            yInitial = e.getY();
         }
     }
 
