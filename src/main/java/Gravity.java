@@ -135,8 +135,8 @@ public class Gravity implements MouseListener {
             System.out.println("quadrant 4");
         }
 
-        xVelocity = (int) (5 * Math.cos(Math.toRadians(angle)));
-        yVelocity = (int) (5 * Math.sin(Math.toRadians(angle)));
+        xVelocity = (int) (15 * Math.cos(Math.toRadians(angle)));
+        yVelocity = (int) (15 * Math.sin(Math.toRadians(angle)));
 
         System.out.println("angle: " + Math.toDegrees(angle) + " | xVel: " + xVelocity + " | yVel: " + yVelocity + "");
     }
