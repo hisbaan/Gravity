@@ -16,8 +16,11 @@ public class Gravity implements MouseListener {
 
     public static final int FRAME_X = 800;
     public static final int FRAME_Y = 800;
+    public static final boolean DEBUG = true;
+    public static int ballDiameter = 10;
+    public static int ballRadius = ballDiameter / 2;
 
-    public static final double GRAVITY = 9.8;
+    public static final double GRAVITY = 1;
 
     public static int xInitial = 0;
     public static int yInitial = 0;
@@ -28,23 +31,25 @@ public class Gravity implements MouseListener {
     public static int xDragDelta = 0;
     public static int yDragDelta = 0;
 
-    public static double angleRadian = 0.0;
+    public static double angle = 0.0;
 
     public static int xPos = 400;
-    public static int yPos = 0;
+    public static int yPos = 400;
 
     public static int xVelocity = 0;
     public static int yVelocity = 0;
 
-    Timer movement;
+    public Timer movement;
 
     public static void main(String[] args) {
         new Gravity();
     }
 
     Gravity() {
-        movement = new Timer(10, e -> {
+        movement = new Timer(50, e -> {
             move();
+            collision();
+            applyGravity();
         });
 
         simulation();
@@ -52,7 +57,8 @@ public class Gravity implements MouseListener {
 
     public void simulation() {
         movement.start();
-        simulationFrame.setSize(FRAME_X, FRAME_Y);
+        simulationFrame.setSize(FRAME_X, FRAME_Y + 22);
+        simulationFrame.setResizable(false);
         simulationFrame.setLayout(new BorderLayout());
 
         if (simulationFrame.getMouseListeners().length < 1) simulationFrame.addMouseListener(this);
@@ -65,33 +71,74 @@ public class Gravity implements MouseListener {
     }
 
     public void move() {
+        if (xDragDelta != 0 || yDragDelta != 0) {
             xPos += xVelocity;
             yPos += yVelocity;
 
             board.validate();
             board.repaint();
+        }
+    }
+
+    public void applyGravity() {
+        yVelocity += GRAVITY;
+    }
+
+    public void collision() {
+        if (xPos >= FRAME_X - ballRadius) {
+            xVelocity *= -1;
+
+            if (DEBUG) System.out.println("Hit east wall:  (" + xPos + ", " + yPos + ")");
+        }
+
+        if (xPos <= ballRadius) {
+            xVelocity *= -1;
+
+            if (DEBUG) System.out.println("Hit west wall:  (" + xPos + ", " + yPos + ")");
+        }
+
+        if (yPos >= FRAME_Y - ballDiameter) {
+
+            yVelocity += -1;
+
+            yPos = FRAME_Y - ballDiameter;
+
+            if (DEBUG) System.out.println("Hit south wall: (" + xPos + ", " + yPos + ")");
+        }
+
+        if (yPos <= ballRadius) {
+            yVelocity *= -1;
+
+            if (DEBUG) System.out.println("Hit north wall: (" + xPos + ", " + yPos + ")");
+        }
     }
 
     public void getAngle() {
-        if (xDragDelta != 0 && yDragDelta != 0) {
-            xDragDelta = xFinal - xInitial;
-            yDragDelta = yFinal - yInitial;
+        xDragDelta = xFinal - xInitial;
+        yDragDelta = yFinal - yInitial;
 
-            angleRadian = Math.tan(yDragDelta / xDragDelta);
+        angle = Math.abs(Math.toDegrees(Math.atan((double) yDragDelta / (double) xDragDelta)));
 
-//        if (angleRadian < 0) {
-//            angleRadian += 360;
-//        } else if (angleRadian > 360) {
-//            angleRadian -= 360;
-//        }
-
-            xVelocity = (int) (5 * Math.cos(angleRadian));
-            yVelocity = (int) (5 * Math.sin(angleRadian));
-
-            System.out.println("angle: " + Math.toDegrees(angleRadian) + " | xVel: " + xVelocity + " | yVel: " + yVelocity + "");
-        } else {
-            System.out.println("xDelta: " + xDragDelta + " | yDelta: " + yDragDelta);
+        if (xDragDelta > 0 && yDragDelta > 0) {
+            System.out.println("quadrant 1");
         }
+        if (xDragDelta < 0 && yDragDelta > 0) {
+            angle = 180 - angle;
+            System.out.println("quadrant 2");
+        }
+        if (xDragDelta < 0 && yDragDelta < 0) {
+            angle = 180 + angle;
+            System.out.println("quadrant 3");
+        }
+        if (xDragDelta > 0 && yDragDelta < 0) {
+            angle = 360 - angle;
+            System.out.println("quadrant 4");
+        }
+
+        xVelocity = (int) (5 * Math.cos(Math.toRadians(angle)));
+        yVelocity = (int) (5 * Math.sin(Math.toRadians(angle)));
+
+        System.out.println("angle: " + Math.toDegrees(angle) + " | xVel: " + xVelocity + " | yVel: " + yVelocity + "");
     }
 
     @Override
@@ -99,8 +146,6 @@ public class Gravity implements MouseListener {
         if (e.getSource() == simulationFrame) {
             xInitial = xPos;
             yInitial = yPos;
-//            xInitial = e.getX();
-//            yInitial = e.getY();
         }
     }
 
