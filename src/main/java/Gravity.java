@@ -99,10 +99,10 @@ public class Gravity implements MouseListener {
 
         if (yPos >= FRAME_Y - ballDiameter) {
 
-            yVelocity += -1;
 
             yPos = FRAME_Y - ballDiameter;
-
+            yVelocity *= -1;
+            yVelocity *= 0.7;
             if (DEBUG) System.out.println("Hit south wall: (" + xPos + ", " + yPos + ")");
         }
 
