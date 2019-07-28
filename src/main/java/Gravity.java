@@ -14,8 +14,10 @@ public class Gravity implements MouseListener {
     JFrame simulationFrame = new JFrame("Gravity");
     GameDrawing board = new GameDrawing();
 
-    public static final int FRAME_X = 800;
-    public static final int FRAME_Y = 800;
+    public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+    public static final int FRAME_X = (int) screenSize.getWidth() - 100;
+    public static final int FRAME_Y = (int) screenSize.getHeight() - 100;
     public static final boolean DEBUG = true;
     public static int ballDiameter = 10;
     public static int ballRadius = ballDiameter / 2;
