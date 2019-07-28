@@ -1,4 +1,4 @@
-//File: gameDrawing.java
+//File: GameDrawing.java
 //Created: 02/07/2019
 //Finished: 02/07/2019
 //Name: Hisbaan Noorani
@@ -8,8 +8,8 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class gameDrawing extends JPanel {
-    gameDrawing() {
+public class GameDrawing extends JPanel {
+    GameDrawing() {
         repaint();
     }
 

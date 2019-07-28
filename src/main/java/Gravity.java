@@ -12,13 +12,14 @@ import java.awt.event.*;
 public class Gravity implements MouseListener {
 
     JFrame simulationFrame = new JFrame("Gravity");
-    gameDrawing board = new gameDrawing();
+    GameDrawing board = new GameDrawing();
 
     public static final int FRAME_X = 800;
     public static final int FRAME_Y = 800;
     public static final boolean DEBUG = true;
     public static int ballDiameter = 10;
     public static int ballRadius = ballDiameter / 2;
+    public int counter = 0;
 
     public static final double GRAVITY = 1;
 
@@ -50,6 +51,7 @@ public class Gravity implements MouseListener {
             move();
             collision();
             applyGravity();
+            applyFriction();
         });
 
         simulation();
@@ -82,6 +84,20 @@ public class Gravity implements MouseListener {
 
     public void applyGravity() {
         yVelocity += GRAVITY;
+    }
+
+    public void applyFriction() {
+        counter++;
+
+        if (counter % 10 == 0) {
+            if (xVelocity > 0) {
+                xVelocity -= 1;
+            }
+
+            if (xVelocity < 0) {
+                xVelocity += 1;
+            }
+        }
     }
 
     public void collision() {

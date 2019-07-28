@@ -4,8 +4,18 @@ plugins {
 
 group 'hisbaan'
 version '1.0-SNAPSHOT'
-
 sourceCompatibility = 1.8
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gravity',
+                'Implementation-Version': version,
+                'Main-Class': 'Gravity'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
 
 repositories {
     mavenCentral()
