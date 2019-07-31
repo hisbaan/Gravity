@@ -24,6 +24,7 @@ public class Gravity implements MouseListener {
     public int counter = 0;
 
     public static final double GRAVITY = 1;
+    public static final int TERMINAL_VELOCITY = 30;
 
     public static int xInitial = 0;
     public static int yInitial = 0;
@@ -85,7 +86,9 @@ public class Gravity implements MouseListener {
     }
 
     public void applyGravity() {
-        yVelocity += GRAVITY;
+        if (yVelocity < TERMINAL_VELOCITY) {
+            yVelocity += GRAVITY;
+        }
     }
 
     public void applyFriction() {
